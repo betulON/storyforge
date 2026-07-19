@@ -6,6 +6,8 @@ import com.bon.storyforge.exception.ResourceNotFoundException;
 import com.bon.storyforge.repository.ChoiceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ChoiceService {
 
@@ -29,5 +31,9 @@ public class ChoiceService {
 
     public Choice getChoiceById(Long id){
         return choiceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Choice not found: " + id));
+    }
+
+    public List<Choice> getChoicesByStoryId(Long storyId){
+        return choiceRepository.findByFromScene_Story_Id(storyId);
     }
 }

@@ -7,6 +7,8 @@ import com.bon.storyforge.service.ChoiceService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ChoiceController {
 
@@ -28,5 +30,10 @@ public class ChoiceController {
         choice.setText(choiceRequest.text());
         Choice savedChoice = choiceService.createChoice(choice, fromSceneId, choiceRequest.toSceneId());
         return ChoiceResponse.from(savedChoice);
+    }
+
+    @GetMapping("/api/stories/{storyId}/choices")
+    public List<ChoiceResponse> getChoicesByStoryId(@PathVariable Long storyId){
+        return ChoiceResponse.fromAll(choiceService.getChoicesByStoryId(storyId));
     }
 }

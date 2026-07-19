@@ -6,6 +6,8 @@ import com.bon.storyforge.exception.ResourceNotFoundException;
 import com.bon.storyforge.repository.SceneRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SceneService {
 
@@ -25,6 +27,10 @@ public class SceneService {
 
     public Scene getSceneById(Long id){
         return sceneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Scene not found: " + id));
+    }
+
+    public List<Scene> getScenesByStoryId(Long storyId){
+        return sceneRepository.findByStoryId(storyId);
     }
 
 }
