@@ -10,12 +10,21 @@ public class Scene {
     private Long id;
     private String title;
     private String content;
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "story_id")
     private Story story;
 
     public Scene(){}
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public String getTitle() {
         return title;

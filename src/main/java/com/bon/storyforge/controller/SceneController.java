@@ -23,6 +23,7 @@ public class SceneController {
         Scene scene = new Scene();
         scene.setTitle(sceneRequest.title());
         scene.setContent(sceneRequest.content());
+        scene.setImageUrl(sceneRequest.imageUrl());
         Scene savedScene = sceneService.createScene(storyId, scene);
         return SceneResponse.from(savedScene);
     }
@@ -30,5 +31,14 @@ public class SceneController {
     @GetMapping("/api/stories/{storyId}/scenes")
     public List<SceneResponse> getScenesByStoryId(@PathVariable Long storyId){
         return SceneResponse.fromAll(sceneService.getScenesByStoryId(storyId));
+    }
+
+    @PutMapping("/api/scenes/{sceneId}")
+    public SceneResponse updateSceneById(@PathVariable Long sceneId, @Valid @RequestBody SceneRequest sceneRequest){
+        Scene updatedScene = new Scene();
+        updatedScene.setContent(sceneRequest.content());
+        updatedScene.setImageUrl(sceneRequest.imageUrl());
+        updatedScene.setTitle(sceneRequest.title());
+        return SceneResponse.from(sceneService.updateScene(sceneId, updatedScene));
     }
 }

@@ -33,4 +33,13 @@ public class SceneService {
         return sceneRepository.findByStoryId(storyId);
     }
 
+    public Scene updateScene(Long id, Scene updatedScene){
+        Scene existingScene = getSceneById(id);
+        existingScene.setContent(updatedScene.getContent());
+        existingScene.setImageUrl(updatedScene.getImageUrl());
+        existingScene.setTitle(updatedScene.getTitle());
+
+        return sceneRepository.save(existingScene);
+    }
+
 }
