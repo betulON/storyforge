@@ -1,5 +1,6 @@
 package com.bon.storyforge.controller;
 
+import com.bon.storyforge.dto.ScenePositionRequest;
 import com.bon.storyforge.dto.SceneRequest;
 import com.bon.storyforge.dto.SceneResponse;
 import com.bon.storyforge.entity.Scene;
@@ -40,5 +41,13 @@ public class SceneController {
         updatedScene.setImageUrl(sceneRequest.imageUrl());
         updatedScene.setTitle(sceneRequest.title());
         return SceneResponse.from(sceneService.updateScene(sceneId, updatedScene));
+    }
+
+    @PatchMapping("/api/scenes/{sceneId}/position")
+    public SceneResponse updateScenePositionById(@PathVariable Long sceneId,
+                                                 @Valid @RequestBody ScenePositionRequest scenePositionRequest){
+        return SceneResponse.from(sceneService.updateScenePosition(sceneId,
+                                                                    scenePositionRequest.positionX(),
+                                                                    scenePositionRequest.positionY()));
     }
 }

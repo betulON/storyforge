@@ -38,7 +38,13 @@ public class SceneService {
         existingScene.setContent(updatedScene.getContent());
         existingScene.setImageUrl(updatedScene.getImageUrl());
         existingScene.setTitle(updatedScene.getTitle());
+        return sceneRepository.save(existingScene);
+    }
 
+    public Scene updateScenePosition(Long id, Double positionX, Double positionY){
+        Scene existingScene = getSceneById(id);
+        existingScene.setPositionX(positionX);
+        existingScene.setPositionY(positionY);
         return sceneRepository.save(existingScene);
     }
 

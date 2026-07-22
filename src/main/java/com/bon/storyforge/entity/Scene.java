@@ -11,12 +11,30 @@ public class Scene {
     private String title;
     private String content;
     private String imageUrl;
+    private Double positionX;
+    private Double positionY;
 
     @ManyToOne
     @JoinColumn(name = "story_id")
     private Story story;
 
     public Scene(){}
+
+    public Double getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(Double positionY) {
+        this.positionY = positionY;
+    }
+
+    public Double getPositionX() {
+        return positionX;
+    }
+
+    public void setPositionX(Double positionX) {
+        this.positionX = positionX;
+    }
 
     public String getImageUrl() {
         return imageUrl;
