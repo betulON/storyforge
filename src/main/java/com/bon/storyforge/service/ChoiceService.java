@@ -20,12 +20,8 @@ public class ChoiceService {
     }
 
     public Choice createChoice(Choice choice, Long fromSceneId, Long toSceneId){
-        Scene fromScene = sceneService.getSceneById(fromSceneId);
-        if (toSceneId != null){
-            Scene toScene = sceneService.getSceneById(toSceneId);
-            choice.setToScene(toScene);
-        }
-        choice.setFromScene(fromScene);
+        choice.setFromScene(sceneService.getSceneById(fromSceneId));
+        choice.setToScene(sceneService.getSceneById(toSceneId));
         return choiceRepository.save(choice);
     }
 
@@ -35,5 +31,23 @@ public class ChoiceService {
 
     public List<Choice> getChoicesByStoryId(Long storyId){
         return choiceRepository.findByFromScene_Story_Id(storyId);
+    }
+
+    public void deleteChoice(Long id){
+        Choice existingChoice = getChoiceById(id);
+        choiceRepository.delete(existingChoice);
+    }
+
+    public Choice moveChoice(Long choiceId, Long fromSceneId, Long toSceneId){
+        Choice existingChoice = getChoiceById(choiceId);
+        existingChoice.setFromScene(sceneService.getSceneById(fromSceneId));
+        existingChoice.setToScene(sceneService.getSceneById(toSceneId));
+        return choiceRepository.save(existingChoice);
+    }
+
+    public Choice updateChoiceProperties(Long id, String text){
+        Choice existingChoice = getChoiceById(id);
+        existingChoice.setText(text);
+        return choiceRepository.save(existingChoice);
     }
 }

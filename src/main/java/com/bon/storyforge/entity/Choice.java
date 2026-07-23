@@ -12,11 +12,11 @@ public class Choice {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "from_scene_id")
+    @JoinColumn(name = "from_scene_id", nullable = false)
     private Scene fromScene;
 
     @ManyToOne
-    @JoinColumn(name= "to_scene_id")
+    @JoinColumn(name = "to_scene_id", nullable = false)
     private Scene toScene;
 
     public Choice(){}

@@ -1,5 +1,5 @@
 import {useState, useEffect, useCallback} from 'react'
-import {type NodeTypes, ReactFlow} from '@xyflow/react'
+import {applyNodeChanges, type NodeChange, type NodeTypes, type OnNodeDrag, ReactFlow} from '@xyflow/react'
 import type { Node, Edge } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import SceneNode from "./SceneNode.tsx";
@@ -19,6 +19,8 @@ type SceneResponse = {
     content: string
     storyId: number
     imageUrl: string | null
+    positionX: number | null
+    positionY: number | null
 }
 
 type ChoiceResponse = {
@@ -44,7 +46,10 @@ function StoryGraph() {
         const graphNodes: Node[] = scenes.map((scene, index) => ({
             id: String(scene.id),
             type: 'scene',
-            position: { x: index * 200, y: 0 },
+            position: {
+                x: scene.positionX ?? index * 200,
+                y: scene.positionY ?? 0
+            },
             data: { label: scene.title, content: scene.content, imageUrl: scene.imageUrl ?? ''},
         }))
 
@@ -77,13 +82,34 @@ function StoryGraph() {
         setEditingSceneId(node.id)
     }
 
+    // keeps our own `nodes` state in sync with drags, selections, etc. happening inside ReactFlow
+    function handleNodesChange(changes: NodeChange[]){
+        setNodes((currentNodes) => applyNodeChanges(changes, currentNodes))
+    }
+
+    // fires once, when the user releases the mouse after dragging a node
+    const handleNodeDragStop: OnNodeDrag<Node> = (_event, node) => {
+        fetch(`http://localhost:8080/api/scenes/${node.id}/position`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ positionX: node.position.x, positionY: node.position.y }),
+        })
+    }
+
     const editingNode = nodes.find((node) => editingSceneId === node.id)
     const editingData = editingNode?.data as SceneNodeData | undefined
 
 
     return (
         <div style={{ height: '100vh', width: '100%' }}>
-            <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} onNodeClick={handleNodeClick} />
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                nodeTypes={nodeTypes}
+                onNodeClick={handleNodeClick}
+                onNodesChange={handleNodesChange}
+                onNodeDragStop={handleNodeDragStop}
+            />
 
             {editingNode && editingData && (
                 <EditSceneModal

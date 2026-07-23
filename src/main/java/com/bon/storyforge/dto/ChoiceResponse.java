@@ -1,10 +1,8 @@
 package com.bon.storyforge.dto;
 
 import com.bon.storyforge.entity.Choice;
-import com.bon.storyforge.entity.Scene;
 
 import java.util.List;
-import java.util.Optional;
 
 public record ChoiceResponse(Long id, String text, Long fromSceneId, Long toSceneId) {
 
@@ -13,7 +11,7 @@ public record ChoiceResponse(Long id, String text, Long fromSceneId, Long toScen
                 choice.getId(),
                 choice.getText(),
                 choice.getFromScene().getId(),
-                choice.getToScene() != null ? choice.getToScene().getId() : null
+                choice.getToScene().getId()
         );
     }
 

@@ -6,6 +6,7 @@ import com.bon.storyforge.dto.SceneResponse;
 import com.bon.storyforge.entity.Scene;
 import com.bon.storyforge.service.SceneService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,20 +35,26 @@ public class SceneController {
         return SceneResponse.fromAll(sceneService.getScenesByStoryId(storyId));
     }
 
-    @PutMapping("/api/scenes/{sceneId}")
-    public SceneResponse updateSceneById(@PathVariable Long sceneId, @Valid @RequestBody SceneRequest sceneRequest){
+    @PutMapping("/api/scenes/{id}")
+    public SceneResponse updateSceneById(@PathVariable Long id, @Valid @RequestBody SceneRequest request){
         Scene updatedScene = new Scene();
-        updatedScene.setContent(sceneRequest.content());
-        updatedScene.setImageUrl(sceneRequest.imageUrl());
-        updatedScene.setTitle(sceneRequest.title());
-        return SceneResponse.from(sceneService.updateScene(sceneId, updatedScene));
+        updatedScene.setContent(request.content());
+        updatedScene.setImageUrl(request.imageUrl());
+        updatedScene.setTitle(request.title());
+        return SceneResponse.from(sceneService.updateScene(id, updatedScene));
     }
 
-    @PatchMapping("/api/scenes/{sceneId}/position")
-    public SceneResponse updateScenePositionById(@PathVariable Long sceneId,
-                                                 @Valid @RequestBody ScenePositionRequest scenePositionRequest){
-        return SceneResponse.from(sceneService.updateScenePosition(sceneId,
-                                                                    scenePositionRequest.positionX(),
-                                                                    scenePositionRequest.positionY()));
+    @PatchMapping("/api/scenes/{id}/position")
+    public SceneResponse updateScenePositionById(@PathVariable Long id,
+                                                 @Valid @RequestBody ScenePositionRequest request){
+        return SceneResponse.from(sceneService.updateScenePosition(id,
+                request.positionX(),
+                request.positionY()));
+    }
+
+    @DeleteMapping("/api/scenes/{id}")
+    public ResponseEntity<Void> deleteScene(@PathVariable Long id){
+        sceneService.deleteScene(id);
+        return ResponseEntity.noContent().build();
     }
 }
